@@ -1,6 +1,5 @@
 import React from 'react'
-import logoIcon from "../../assets/Images/Logo (2).png"
-import LogoIcon from '../reusables/icons/LogoIcon'
+import logoIcon from "../../assets/Images/logo (2).png"
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdEventSeat, MdHistory, MdOutlineInventory2 } from "react-icons/md";
 import { IoIosList } from "react-icons/io";
@@ -9,6 +8,8 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 import { useCustomContext } from '../../hooks/Context';
+import useAuthentication from '../../hooks/UseAuthentication';
+
 
 
 
@@ -59,7 +60,8 @@ const endTabs = [
 
 export default function Sidebar() {
 
-    const {active , setActive} =  useCustomContext()
+    const { active, setActive } = useCustomContext()
+    const {logout} = useAuthentication()
     return (
         <div className='bg-[#FFFFFFF]  h-full p-2 px-6 flex flex-col justify-between py-4'>
             <div>
@@ -74,12 +76,15 @@ export default function Sidebar() {
                 ))}
             </div>
             <div className='flex flex-col gap-5'>
-                <div className='w-full h-[137px] rounded-[8px] bg-gray-950'>
-
+                <div className='w-full h-[137px] rounded-[8px] bg-gray-950 text-white'>
+<div className='flex ml-10 gap-4 mt-4'><h3>EmiMish!</h3><h4>POS</h4></div>
+<div className='flex gap-2 items-center ml-2'>
+    <p>Help Center</p> <p>Support</p> <p>Legal</p>
+</div>
                 </div>
                 <div>
                     {endTabs.map((item, index) => (
-                        <div className='flex items-center  h-[40px] px-6 gap-3 '>
+                        <div className='flex items-center cursor-pointer  h-[40px] px-6 gap-3 ' onClick={() => logout()}>
                             {item.icon}
                             <p className='text-[#404040] font-[400] text-[14px]'>{item.title}</p>
                         </div>

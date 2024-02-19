@@ -1,28 +1,89 @@
-import React from 'react'
+import React, { useState } from 'react'
 import images from '../assets/Images/Frame 59955.png';
 import images2 from '../assets/Images/Logo (1).png';
 import images3 from '../assets/Images/Google.png';
+import { toast } from 'react-toastify';
+import useAuthentication from '../hooks/UseAuthentication';
+import { useCookies } from 'react-cookie';
+import { useCustomContext } from '../hooks/Context';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 function SignUp() {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        password_confirmation: ''
+    });
+    const [isLoading, setIsLoading] = useState(false)
+    const [cookies, setCookie] = useCookies(['user', 'access']);
+    const { user, setUser } = useCustomContext()
+    const navigate = useNavigate();
+    const simulateLogin = (formData) => {
+        const { email, password, password_confirmation } = formData;
+
+        setIsLoading(true);
+
+        setTimeout(() => {
+            if (email === email && password === password_confirmation) {
+                setCookie('user', { email });
+                setCookie('access', { password });
+                setUser({ email });
+                navigate("/login");
+                toast.success('Account created successful', {
+                    hideProgressBar: true, // Hide the loader
+                    autoClose: 1000
+                });
+            } else {
+                toast.error('Oops something failed', {
+                    // hideProgressBar: true, // Hide the loader
+                    autoClose: 2000
+                });
+            }
+            setIsLoading(false);
+        }, 1000);
+    };
+
+
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (formData.password === formData.password_confirmation) {
+            simulateLogin(formData);
+        } else {
+            toast.error('Password mismatch', {
+                autoClose: 2000
+            }); s
+        }
+        console.log(formData); // For demonstration, log the form data
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
     return (
-        <div className='px-20'> 
+        <div className='px-20'>
 
 
             <section className="bg-white">
-                <div className="lg:grid lg:min- lg:grid-cols-12">
+                <div className="lg:grid lg:min- lg:grid-cols-12 lg:block h-16 hidden">
                     <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
                         <img src={images} alt="Frame5995.png" className='h-[39rem] w-[36rem] mt-[4rem] 
                             '/>
                     </aside>
-                    <div  className="flex  px-6  sm:px-12 lg:col-span-7 lg:px-16 lg:py-2 xl:col-span-6 py-">
-                    <main>
-                        <div className="max-w-xl lg:max-w-3xl">
-                            <a className="block text-blue-600" href="/">
-                                {/* <span class="sr-only">Home</span> */}
-                                {/* <svg
+                    <div className="flex  px-6  sm:px-12 lg:col-span-7 lg:px-16 lg:py-2 xl:col-span-6 py-">
+                        <main>
+                            <div className="max-w-xl lg:max-w-3xl">
+                                <a className="block text-blue-600" href="/">
+                                    {/* <span class="sr-only">Home</span> */}
+                                    {/* <svg
                                     class="h-8 sm:h-10 px-20"
                                     viewBox="0 0 28 24"
                                     fill="none"
@@ -33,22 +94,22 @@ function SignUp() {
                                         fill="currentColor"
                                     />
                                 </svg> */}
-                                <img src={images2} alt="Logo(1).png" className='px-20' />
-                            </a>
+                                    <img src={images2} alt="Logo(1).png" className='px-20' />
+                                </a>
 
 
-                            <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-2xl px-20">
-                                Welcome to McFestines! 👌
-                            </h1>
+                                <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-2xl px-20">
+                                    Welcome to McFestines! 👌
+                                </h1>
 
-                            <p className="mt-4 leading-relaxed text-gray-500 px-20 ">
-                                Create your account, let's get you started!
-                            </p>
+                                <p className="mt-4 leading-relaxed text-gray-500 px-20 ">
+                                    Create your account, let's get you started!
+                                </p>
 
-                            <div className='px-20'>
+                                <div className='px-20'>
 
-                                <form action="#" className="mt-8 grid-cols-6 gap-6">
-                                    {/* <div class="col-span-6 sm:col-span-3 ">
+                                    <form onSubmit={handleSubmit} className="mt-8 grid-cols-6 gap-6">
+                                        {/* <div class="col-span-6 sm:col-span-3 ">
             <label for="FirstName" class="block text-sm font-medium text-gray-700 shiftedText">
               First Name
             </label>
@@ -61,7 +122,7 @@ function SignUp() {
             />
           </div> */}
 
-                                    {/* <div class="col-span-6 sm:col-span-3">
+                                        {/* <div class="col-span-6 sm:col-span-3">
             <label for="LastName" class="block text-sm font-medium text-gray-700">
               Last Name
             </label>
@@ -74,94 +135,103 @@ function SignUp() {
               />
           </div> */}
 
-                                    <div className="col-span-6">
-                                        <label for="Email" className="block text-sm font-medium text-gray-700"> Email </label>
+                                        <div className="col-span-6">
+                                            <label for="Email" className="block text-sm font-medium text-gray-700"> Email </label>
 
-                                        <input
-                                            type="email"
-                                            id="Email"
-                                            name="email"
-                                            placeholder="example@gmail.com"
-                                            className="mt-1 w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
-                                        />
-                                    </div>
-
-                                    <div className="col-span-6 sm:col-span-3 mt-[2rem]">
-                                        <label for="Password" className="block text-sm font-medium text-gray-700"> Password </label>
-
-                                        <input
-                                            type="password"
-                                            id="Password"
-                                            name="password"
-                                            placeholder="*********"
-                                            className="mt-[10px] w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
-                                        />
-                                    </div>
-
-                                    <div className="col-span-6 sm:col-span-3 mt-[2rem]">
-                                        <label for="PasswordConfirmation" className="block text-sm font-medium text-gray-700">
-                                            Re-type Password
-                                        </label>
-
-                                        <input
-                                            type="password"
-                                            id="PasswordConfirmation"
-                                            name="password_confirmation"
-                                            placeholder="example@gmail.com"
-                                            className="mt-[10px] w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
-                                        />
-                                    </div>
-
-                                    <div className="col-span-6  mt-[0.4rem]">
-                                        <label for="MarketingAccept" className="flex gap-2">
                                             <input
-                                                type="checkbox"
-                                                id="MarketingAccept"
-                                                name="marketing_accept"
-                                                className="h-5 w-5 rounded-md border-gray-200 bg-white shadow-sm"
+                                                type="email"
+                                                id="Email"
+                                                name="email"
+                                                placeholder="example@gmail.com"
+                                                value={formData.email}
+                                                onChange={handleInputChange}
+                                                className="mt-1 w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
                                             />
-
-                                            <div className="col-span-6" >
-                                                <p className="text-sm text-gray-500">
-                                                    I have read and agree with the
-                                                    <a href="#" className="text-orange-400 "> privacy policy </a>
-                                                    and <br />
-                                                    <a href="#" className="text-orange-400 ">terms and condition</a>.
-                                                </p>
-                                            </div>
-
-                                        </label>
-                                    </div>
-
-
-
-                                    <div className="col-span-6 sm:flex sm:items-center sm:gap-4 ">
-                                        <div className='mt-[2rem]'>
-                                            <button
-                                                class=" shrink-0 rounded-full border border-[#F5EAD6] bg-[#F5EAD6] px-[5rem] py-2  text-sm font-medium text-gray-600 transition hover:bg-transparent hover:text-[#F5EAD6] focus:outline-none focus:ring active:text-[#F5EAD6] flex gap-1"
-                                            >
-                                                 <img src={images3} alt="Google.png"/>
-                                                <p className=''>Sign up with google</p>
-                                            </button>
-                                            <button
-                                                class="inline-block shrink-0 rounded-full border border-[#CF9832]-600 bg-[#CF9832] px-[8.5rem] py-2  text-sm font-medium text-white transition hover:bg-transparent hover:text-[#CF9832] focus:outline-none focus:ring active:text-b[#CF9832] mt-[1rem]"
-                                            >
-                                                <p className=''>Sign up</p>
-                                            </button>
-                                         
                                         </div>
 
-                                    </div>
-                                    <p class="mt-4 text-sm text-gray-500 sm:mt-2">
+                                        <div className="col-span-6 sm:col-span-3 mt-[2rem]">
+                                            <label for="Password" className="block text-sm font-medium text-gray-700"> Password </label>
+
+                                            <input
+                                                type="password"
+                                                id="Password"
+                                                name="password"
+                                                placeholder="*********"
+                                                value={formData.password}
+                                                onChange={handleInputChange}
+                                                className="mt-[10px] w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
+                                            />
+                                        </div>
+
+                                        <div className="col-span-6 sm:col-span-3 mt-[2rem]">
+                                            <label for="PasswordConfirmation" className="block text-sm font-medium text-gray-700">
+                                                Re-type Password
+                                            </label>
+
+                                            <input
+                                                type="password"
+                                                id="PasswordConfirmation"
+                                                name="password_confirmation"
+                                                placeholder="*********"
+                                                value={formData.password_confirmation}
+                                                onChange={handleInputChange}
+                                                className="mt-[10px] w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
+                                            />
+
+                                        </div>
+
+                                        <div className="col-span-6  mt-[0.4rem]">
+                                            <label for="MarketingAccept" className="flex gap-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id="MarketingAccept"
+                                                    name="marketing_accept"
+                                                    className="h-5 w-5 rounded-md border-gray-200 bg-white shadow-sm"
+                                                />
+
+                                                <div className="col-span-6" >
+                                                    <p className="text-sm text-gray-500">
+                                                        I have read and agree with the
+                                                        <a href="#" className="text-orange-400 "> privacy policy </a>
+                                                        and <br />
+                                                        <a href="#" className="text-orange-400 ">terms and condition</a>.
+                                                    </p>
+                                                </div>
+
+                                            </label>
+                                        </div>
+
+
+
+                                        <div className="col-span-6 sm:flex sm:items-center sm:gap-4 ">
+                                            <div className='mt-[2rem]'>
+                                                <button
+                                                    type='button'
+                                                    class=" shrink-0 rounded-full border border-[#F5EAD6] bg-[#F5EAD6] px-[5rem] py-2  text-sm font-medium text-gray-600 transition hover:bg-transparent hover:text-[#F5EAD6] focus:outline-none focus:ring active:text-[#F5EAD6] flex gap-1"
+                                                >
+                                                    <img src={images3} alt="Google.png" />
+                                                    <p className=''>Sign up with google</p>
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    class="inline-block shrink-0 rounded-full border border-[#CF9832]-600 bg-[#CF9832] px-[8.5rem] py-2  text-sm font-medium text-white transition hover:bg-transparent hover:text-[#CF9832] focus:outline-none focus:ring active:text-b[#CF9832] mt-[1rem]"
+                                                >
+                                                    <p className=''>Sign up</p>
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                        <p class="mt-4 text-sm text-gray-500 sm:mt-2">
                                             Already have an account?
                                             <a href="#" class="text-[#CF9832] ">Log in</a>.
                                         </p>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    </main>
+                        </main>
                     </div>
-                    
+
                 </div>
             </section>
         </div>

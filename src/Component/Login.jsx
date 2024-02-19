@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import images from '../assets/Images/Frame 59955.png';
 import images2 from '../assets/Images/Logo (1).png';
 import images3 from '../assets/Images/Google.png';
@@ -11,7 +11,7 @@ import useAuthentication from '../hooks/UseAuthentication';
 function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const navigate = useNavigate();
-    const { simulateLogin } = useAuthentication();
+    const { simulateLogin, isLoading } = useAuthentication();
 
 
     const handleInputChange = (e) => {
@@ -25,7 +25,7 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         simulateLogin(formData);
-        navigate('/');
+        // navigate('/');
     };
 
 
@@ -35,7 +35,7 @@ function Login() {
 
             <section className="bg-white">
                 <div className="lg:grid lg:min- lg:grid-cols-12">
-                    <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
+                    <aside className="relative lg:block h-16 hidden lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
                         <img src={images} alt="Frame5995.png" className='h-[39rem] w-[36rem] mt-[4rem] 
                             '/>
                     </aside>
@@ -69,7 +69,7 @@ function Login() {
 
                                 <div className='px-20'>
 
-                                    <form action="#" className="mt-8 grid-cols-6 gap-6">
+                                    <form onSubmit={ handleSubmit} className="mt-8 grid-cols-6 gap-6" >
 
                                         {/* What is this for if you know you no longer need sth get rid of it so we can have some cleanups and revamped codebase */}
 
@@ -123,7 +123,7 @@ function Login() {
                                                 placeholder="*********"
                                                 value={formData.password}
                                                 onChange={handleInputChange}
-                                                className="mt-[10px] w-[20rem] h-[2.5rem] px-3J rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
+                                                className="mt-[10px] w-[20rem] h-[2.5rem] px-3 rounded-full border-2 placeholder:mt-2 bg-white text-sm text-gray-900 border-gray-200 flex items-center "
                                             />
                                         </div>
 
@@ -153,6 +153,7 @@ function Login() {
                                         <div className="col-span-6 sm:flex sm:items-center sm:gap-4 ">
                                             <div className='mt-[2rem]'>
                                                 <button
+                                                type='button'
                                                     class=" shrink-0 rounded-full border border-[#F5EAD6] bg-[#F5EAD6] px-[5rem] py-2  text-sm font-medium text-gray-600 transition hover:bg-transparent hover:text-[#F5EAD6] focus:outline-none focus:ring active:text-[#F5EAD6] flex gap-1"
                                                 >
                                                     <img src={images3} alt="Google.png" />
@@ -162,7 +163,7 @@ function Login() {
                                                     type="submit"
                                                     class="inline-block shrink-0 rounded-full border border-[#CF9832]-600 bg-[#CF9832] px-[8.5rem] py-2  text-sm font-medium text-white transition hover:bg-transparent hover:text-[#CF9832] focus:outline-none focus:ring active:text-b[#CF9832] mt-[1rem]"
                                                 >
-                                                    <p className=''>Sign up</p>
+                                                    <p className=''>{isLoading ? "Signing in" : "Sign in"}</p>
                                                 </button>
 
                                             </div>
@@ -170,7 +171,7 @@ function Login() {
                                         </div>
                                         <p class="mt-4 text-sm text-gray-500 sm:mt-2">
                                             Don't have an account?
-                                            <a href="#" class="text-[#CF9832] ">Sign up</a>.
+                                            <Link to="/signUp" class="text-[#CF9832] ">Sign up</Link>.
                                         </p>
                                     </form>
                                 </div>

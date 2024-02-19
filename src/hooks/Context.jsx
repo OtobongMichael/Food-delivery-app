@@ -12,9 +12,10 @@ export function useCustomContext() {
 
 export function CustomContextProvider({ children }) {
   const [active, setActive] = useState("Dashboard");
+  const [user , setUser] = useState("")
 
   return (
-    <CustomContext.Provider value={{ active, setActive }}>
+    <CustomContext.Provider value={{ active, setActive , user , setUser }}>
       {children}
     </CustomContext.Provider>
   );

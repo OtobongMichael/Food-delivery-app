@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { toast } from 'react-toastify';
 
 const useAuthentication = () => {
     const [user, setUser] = useState(null);
@@ -17,7 +18,8 @@ const useAuthentication = () => {
         } else {
             navigate('/login');
         }
-    }, [cookies, navigate]);
+        console.log("Use effect");
+    }, [cookies, navigate, user]); // Include 'user' in the dependency array
 
     const isAuthorized = user !== null;
 
@@ -25,31 +27,45 @@ const useAuthentication = () => {
         if (!isLoading && !isAuthorized) {
             navigate('/login');
         }
-    }, [isLoading, isAuthorized, navigate]);
+    }, [isAuthorized, navigate]);
+
 
     const simulateLogin = (formData) => {
-        const { email, password } = formData;
+        const { email, password} = formData;
 
         setIsLoading(true);
 
-
         setTimeout(() => {
-            if (email === 'nathantrustekanem@gmail.com' && password === '1234') {
-                setCookie('user', { email });
-                setCookie('access', 'dummyToken');
-                setUser({ email });
+            if (email === cookies?.user?.email && password === cookies?.access?.password) {
+                // setCookie('user', { email });
+                // setCookie('access', 'dummyToken');
+                // setUser({ email });
+                navigate("/");
+            toast.success('Login successful', {
+                hideProgressBar: true, // Hide the loader
+                autoClose: 1000 
+            });
+            } else {
+                toast.error('Login failed', {
+                    // hideProgressBar: true, // Hide the loader
+                    autoClose: 2000 
+                });
             }
             setIsLoading(false);
-        }, 2000);
+        }, 1000);
     };
 
     const logout = () => {
         setCookie('user', null, { maxAge: 0 });
         setCookie('access', null, { maxAge: 0 });
         setUser(null);
+        toast.info('Logged out successful' , {
+            hideProgressBar: true ,// Hide the loader
+            autoClose: 1000 
+        });
     };
 
-    return { user, isLoading, isAuthorized, simulateLogin, logout };
+    return { user, isLoading, isAuthorized, simulateLogin, logout, setUser };
 };
 
 export default useAuthentication;
