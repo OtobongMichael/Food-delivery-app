@@ -1,14 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import images from '../assets/Images/Frame 59955.png';
 import images2 from '../assets/Images/Logo (1).png';
 import images3 from '../assets/Images/Google.png';
+import useAuthentication from '../hooks/UseAuthentication';
 
 
 
 
 function Login() {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const navigate = useNavigate();
+    const { simulateLogin } = useAuthentication();
+
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        simulateLogin(formData);
+        navigate('/');
+    };
+
+
     return (
-        <div className='px-20'> 
+        <div className='px-20'>
 
 
             <section className="bg-white">
@@ -17,12 +39,12 @@ function Login() {
                         <img src={images} alt="Frame5995.png" className='h-[39rem] w-[36rem] mt-[4rem] 
                             '/>
                     </aside>
-                    <div  className="flex  px-6  sm:px-12 lg:col-span-7 lg:px-16 lg:py-2 xl:col-span-6">
-                    <main>
-                        <div className="max-w-xl lg:max-w-3xl">
-                            <a className="block text-blue-600" href="/">
-                                {/* <span class="sr-only">Home</span> */}
-                                {/* <svg
+                    <div className="flex  px-6  sm:px-12 lg:col-span-7 lg:px-16 lg:py-2 xl:col-span-6">
+                        <main>
+                            <div className="max-w-xl lg:max-w-3xl">
+                                <a className="block text-blue-600" href="/">
+                                    {/* <span class="sr-only">Home</span> */}
+                                    {/* <svg
                                     class="h-8 sm:h-10 px-20"
                                     viewBox="0 0 28 24"
                                     fill="none"
@@ -33,22 +55,25 @@ function Login() {
                                         fill="currentColor"
                                     />
                                 </svg> */}
-                                <img src={images2} alt="Logo(1).png" className='px-20' />
-                            </a>
+                                    <img src={images2} alt="Logo(1).png" className='px-20' />
+                                </a>
 
 
-                            <h1 className=" text-gray-900  md:text-[27px] px-[5rem] mt-[5rem]">
-                                Hi there, welcome back😜
-                            </h1>
+                                <h1 className=" text-gray-900  md:text-[27px] px-[5rem] mt-[5rem]">
+                                    Hi there, welcome back😜
+                                </h1>
 
-                            <p className="mt-4 leading-relaxed text-gray-500 px-20 ">
-                                Please enter your details to login.
-                            </p>
+                                <p className="mt-4 leading-relaxed text-gray-500 px-20 ">
+                                    Please enter your details to login.
+                                </p>
 
-                            <div className='px-20'>
+                                <div className='px-20'>
 
-                                <form action="#" className="mt-8 grid-cols-6 gap-6">
-                                    {/* <div class="col-span-6 sm:col-span-3 ">
+                                    <form action="#" className="mt-8 grid-cols-6 gap-6">
+
+                                        {/* What is this for if you know you no longer need sth get rid of it so we can have some cleanups and revamped codebase */}
+
+                                        {/* <div class="col-span-6 sm:col-span-3 ">
             <label for="FirstName" class="block text-sm font-medium text-gray-700 shiftedText">
               First Name
             </label>
@@ -61,7 +86,7 @@ function Login() {
             />
           </div> */}
 
-                                    {/* <div class="col-span-6 sm:col-span-3">
+                                        {/* <div class="col-span-6 sm:col-span-3">
             <label for="LastName" class="block text-sm font-medium text-gray-700">
               Last Name
             </label>
@@ -74,81 +99,85 @@ function Login() {
               />
           </div> */}
 
-                                    <div className="col-span-6">
-                                        <label for="Email" className="block text-sm font-medium text-gray-700"> Email address</label>
+                                        <div className="col-span-6">
+                                            <label for="Email" className="block text-sm font-medium text-gray-700"> Email address</label>
 
-                                        <input
-                                            type="email"
-                                            id="Email"
-                                            name="email"
-                                            placeholder="example@gmail.com"
-
-                                            className="mt-1 w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
-                                        />
-                                    </div>
-
-                                    <div className="col-span-6 sm:col-span-3 mt-[2rem]">
-                                        <label for="Password" className="block text-sm font-medium text-gray-700"> Password </label>
-
-                                        <input
-                                            type="password"
-                                            id="Password"
-                                            name="password"
-                                            placeholder="*********"
-                                            className="mt-[10px] w-[20rem] h-[2.5rem] px-3J rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
-                                        />
-                                    </div>
-
-                               
-
-                                    <div className="col-span-6  mt-[0.4rem]">
-                                        <label for="MarketingAccept" className="flex gap-2">
                                             <input
-                                                type="checkbox"
-                                                id="MarketingAccept"
-                                                name="marketing_accept"
-                                                className="h-5 w-5 rounded-md border-gray-200 bg-white shadow-sm"
+                                                type="email"
+                                                id="Email"
+                                                name="email"
+                                                placeholder="example@gmail.com"
+                                                value={formData.email}
+                                                onChange={handleInputChange}
+                                                className="mt-1 w-[20rem] px-3 h-[2.5rem] rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
                                             />
-
-                                            <div className="col-span-6 flex justify-around gap-[5.5rem]">
-                                                <p className="text-sm text-gray-500 mr-[5px]">
-                                                    Remember me
-                                                </p>
-                                                <p className="text-sm text-[#CF9832] mr-[5px]">Forget password?</p>
-                                            </div>
-
-                                        </label>
-                                    </div>
-
-
-
-                                    <div className="col-span-6 sm:flex sm:items-center sm:gap-4 ">
-                                        <div className='mt-[2rem]'>
-                                            <button
-                                                class=" shrink-0 rounded-full border border-[#F5EAD6] bg-[#F5EAD6] px-[5rem] py-2  text-sm font-medium text-gray-600 transition hover:bg-transparent hover:text-[#F5EAD6] focus:outline-none focus:ring active:text-[#F5EAD6] flex gap-1"
-                                            >
-                                                 <img src={images3} alt="Google.png"/>
-                                                <p className=''>Sign in with google</p>
-                                            </button>
-                                            <button
-                                                class="inline-block shrink-0 rounded-full border border-[#CF9832]-600 bg-[#CF9832] px-[8.5rem] py-2  text-sm font-medium text-white transition hover:bg-transparent hover:text-[#CF9832] focus:outline-none focus:ring active:text-b[#CF9832] mt-[1rem]"
-                                            >
-                                                <p className=''>Sign up</p>
-                                            </button>
-                                         
                                         </div>
 
-                                    </div>
-                                    <p class="mt-4 text-sm text-gray-500 sm:mt-2">
+                                        <div className="col-span-6 sm:col-span-3 mt-[2rem]">
+                                            <label for="Password" className="block text-sm font-medium text-gray-700"> Password </label>
+
+                                            <input
+                                                type="password"
+                                                id="Password"
+                                                name="password"
+                                                placeholder="*********"
+                                                value={formData.password}
+                                                onChange={handleInputChange}
+                                                className="mt-[10px] w-[20rem] h-[2.5rem] px-3J rounded-full border-2 bg-white text-sm text-gray-900 border-gray-200"
+                                            />
+                                        </div>
+
+
+
+                                        <div className="col-span-6  mt-[0.4rem]">
+                                            <label for="MarketingAccept" className="flex gap-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id="MarketingAccept"
+                                                    name="marketing_accept"
+                                                    className="h-5 w-5 rounded-md border-gray-200 bg-white shadow-sm"
+                                                />
+
+                                                <div className="col-span-6 flex justify-around gap-[5.5rem]">
+                                                    <p className="text-sm text-gray-500 mr-[5px]">
+                                                        Remember me
+                                                    </p>
+                                                    <p className="text-sm text-[#CF9832] mr-[5px]">Forget password?</p>
+                                                </div>
+
+                                            </label>
+                                        </div>
+
+
+
+                                        <div className="col-span-6 sm:flex sm:items-center sm:gap-4 ">
+                                            <div className='mt-[2rem]'>
+                                                <button
+                                                    class=" shrink-0 rounded-full border border-[#F5EAD6] bg-[#F5EAD6] px-[5rem] py-2  text-sm font-medium text-gray-600 transition hover:bg-transparent hover:text-[#F5EAD6] focus:outline-none focus:ring active:text-[#F5EAD6] flex gap-1"
+                                                >
+                                                    <img src={images3} alt="Google.png" />
+                                                    <p className=''>Sign in with google</p>
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    class="inline-block shrink-0 rounded-full border border-[#CF9832]-600 bg-[#CF9832] px-[8.5rem] py-2  text-sm font-medium text-white transition hover:bg-transparent hover:text-[#CF9832] focus:outline-none focus:ring active:text-b[#CF9832] mt-[1rem]"
+                                                >
+                                                    <p className=''>Sign up</p>
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                        <p class="mt-4 text-sm text-gray-500 sm:mt-2">
                                             Don't have an account?
                                             <a href="#" class="text-[#CF9832] ">Sign up</a>.
                                         </p>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    </main>
+                        </main>
                     </div>
-                    
+
                 </div>
             </section>
         </div>
