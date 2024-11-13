@@ -14,8 +14,12 @@ export function CustomContextProvider({ children }) {
   const [active, setActive] = useState("Dashboard");
   const [user , setUser] = useState("")
 
+  const [showPanel, setShowPanel] = useState(false);
+  const [panelType, setPanelType] = useState(null);
+  
+
   return (
-    <CustomContext.Provider value={{ active, setActive , user , setUser }}>
+    <CustomContext.Provider value={{ active, setActive , user , setUser,showPanel, setShowPanel , panelType, setPanelType }}>
       {children}
     </CustomContext.Provider>
   );

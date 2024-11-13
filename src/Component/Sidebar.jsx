@@ -1,6 +1,12 @@
 import React from 'react'
 
 function Sidebar() {
+  const { logout } = useAuthentication(); // Destructure the logout function from the hook
+
+  const handleLogout = () => {
+      logout(); // Call the logout function when the button is clicked
+  };
+
   return (
     <div>
         <div class="flex h-screen flex-col justify-between border-e bg-white">
@@ -122,9 +128,10 @@ function Sidebar() {
             </li>
 
             <li>
-              <form action="/logout">
+              <form>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleLogout} 
                   class="w-full rounded-lg px-4 py-2 text-sm font-medium text-gray-500 [text-align:_inherit] hover:bg-gray-100 hover:text-gray-700"
                 >
                   Logout

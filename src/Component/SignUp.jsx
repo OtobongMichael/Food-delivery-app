@@ -7,7 +7,9 @@ import useAuthentication from '../hooks/UseAuthentication';
 import { useCookies } from 'react-cookie';
 import { useCustomContext } from '../hooks/Context';
 import { useNavigate } from 'react-router-dom';
-
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../api/firebase';
+// import { auth } from "../api/firebase";
 
 
 
@@ -50,15 +52,41 @@ function SignUp() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (formData.password === formData.password_confirmation) {
-            simulateLogin(formData);
-        } else {
-            toast.error('Password mismatch', {
-                autoClose: 2000
-            }); s
+    
+        const { email, password, password_confirmation } = formData;
+    
+        if (password !== password_confirmation) {
+            toast.error('Passwords do not match');
+            return;
         }
-        console.log(formData); // For demonstration, log the form data
+    
+        setIsLoading(true);
+    
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed up successfully
+                const user = userCredential.user;
+                console.log("user credential", userCredential);
+                // Redirect, set cookies, or perform any other necessary actions
+                toast.success('Account created successfully', {
+                    hideProgressBar: true,
+                    autoClose: 1000
+                });
+                setIsLoading(false);
+                navigate("/login");
+            })
+            .catch((error) => {
+                // Handle errors
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error("Sign up error:", errorCode, errorMessage);
+                setIsLoading(false);
+                toast.error(errorMessage, {
+                    autoClose: 2000
+                });
+            });
     };
+    
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;

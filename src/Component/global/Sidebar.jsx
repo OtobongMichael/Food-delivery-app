@@ -63,7 +63,7 @@ export default function Sidebar() {
     const { active, setActive } = useCustomContext()
     const {logout} = useAuthentication()
     return (
-        <div className='bg-[#FFFFFFF]  h-full p-2 px-6 flex flex-col justify-between py-4'>
+        <div className='bg-[#FFFFFFF]  h-full p-2 flex flex-col justify-between py-4 '>
             <div>
                 <img src={logoIcon} alt="" />
             </div>
@@ -75,11 +75,14 @@ export default function Sidebar() {
                     </div>
                 ))}
             </div>
-            <div className='flex flex-col gap-5'>
-                <div className='w-full h-[137px] rounded-[8px] bg-gray-950 text-white'>
-<div className='flex ml-10 gap-4 mt-4'><h3>EmiMish!</h3><h4>POS</h4></div>
-<div className='flex gap-2 items-center ml-2'>
-    <p>Help Center</p> <p>Support</p> <p>Legal</p>
+            <div className='flex flex-col gap-5 '>
+                <div className='w-full h-[137px] rounded-[8px] bg-gray-950 text-white '>
+<div className='flex ml-[2rem] gap-5 mt-2 '><h3 className='font-bold font-mono'>EmiMish!</h3><h4>POS</h4></div>
+<div className='flex gap-[10px] items-center ml-4 '>
+    <p>Help Center</p><p>Support</p> <p>Legal</p>
+</div>
+<div className='mt-2  text-sm text font-sans font-thin '>
+    <p>Lorem ipsum dolor sit amet  elit rus ey. aperiam laborum um  minima tempore omnis. </p>
 </div>
                 </div>
                 <div>

@@ -4,6 +4,10 @@ import images from '../assets/Images/Frame 59955.png';
 import images2 from '../assets/Images/Logo (1).png';
 import images3 from '../assets/Images/Google.png';
 import useAuthentication from '../hooks/UseAuthentication';
+import { signInWithEmailAndPassword } from 'firebase/auth'; // Import signInWithEmailAndPassword
+import { auth } from '../api/firebase';
+import { toast } from 'react-toastify';
+
 
 
 
@@ -11,7 +15,8 @@ import useAuthentication from '../hooks/UseAuthentication';
 function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const navigate = useNavigate();
-    const { simulateLogin, isLoading } = useAuthentication();
+    const { simulateLogin } = useAuthentication();
+    const [isLoading, setIsLoading] = useState(false)
 
 
     const handleInputChange = (e) => {
@@ -24,9 +29,29 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        simulateLogin(formData);
-        // navigate('/');
-    };
+        setIsLoading(true);
+
+        const { email, password } = formData;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log("User:", user);
+                setIsLoading(false);
+                navigate('/');
+            })
+            .catch((error) => {
+                // Handle errors
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error("Sign in error:", errorCode, errorMessage);
+                setIsLoading(false);
+                // alert(errorMessage);
+                toast.error(errorMessage, {
+                    autoClose: 2000
+                });
+            });
+    }
 
 
     return (
